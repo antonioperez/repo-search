@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import RepoSearch from '@/components/RepoSearch.vue';
 
 export default {
@@ -14,7 +13,6 @@ export default {
     RepoSearch
   },
   beforeMount() {
-
   },
 }
 </script>

@@ -5,7 +5,7 @@ export const githubService = {
 };
 
 const baseURL = "https://api.github.com/";
-const apiKey = '';
+const apiKey = process.env.GITHUB_API_KEY;
 const githubAPI = axios.create({
   baseURL,
   headers: {
