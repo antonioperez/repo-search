@@ -10,6 +10,6 @@ export default new Router({
       path: '/:search?',
       name: 'RepoSearch',
       component: RepoSearch
-    }
+    },
   ]
 })
