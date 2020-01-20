@@ -6,10 +6,11 @@
       :src="repo.owner.avatarUrl"
       alt="repo owner avatar"
     />
-    <mdb-media-body>
-      <h5 class="repo-media-body mt-0 mb-1 font-weight-bold">
-        <a :href="repo.url" target="_blank">{{ repo.nameWithOwner }}</a>
+    <mdb-media-body class="repo-media-body">
+      <h5 class="repo-title mt-0 mb-3 font-weight-bold">
+        <a :href="repo.url" target="_blank">{{ repo.name }}</a>
       </h5>
+      <h6><a :href="repo.url" target="_blank"><mdb-icon fab icon="github" />&nbsp;{{ repo.nameWithOwner }}</a></h6>
       <p>{{ repo.description }}</p>
       <p>
         <span class="repo-stat"><mdb-icon icon="code-branch" />&nbsp;{{
@@ -108,5 +109,12 @@ export default {
 }
 .repo-stat {
   margin-right: 0.5rem;
+}
+
+.repo-title {
+  text-transform: lowercase;
+  &:first-letter {
+    text-transform: uppercase;
+  }
 }
 </style>
