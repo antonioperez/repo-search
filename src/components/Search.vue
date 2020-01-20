@@ -13,7 +13,11 @@
     </mdb-container>
     <mdb-container>
       <ul class="list-unstyled">
-        <repo-overview v-for="(repo, index) in repos" :key="index" :repo="repo.node" />
+        <repo-overview
+          v-for="(repo, index) in repos"
+          :key="index"
+          :repo="repo.node"
+        />
       </ul>
     </mdb-container>
   </div>
@@ -21,7 +25,7 @@
 
 <script>
 import { mdbInput, mdbContainer } from "mdbvue";
-import RepoOverview from './RepoOverview';
+import RepoOverview from "./RepoOverview";
 import { githubService } from "@/services/github.service";
 
 export default {
@@ -29,7 +33,7 @@ export default {
   components: {
     mdbInput,
     mdbContainer,
-    RepoOverview,
+    RepoOverview
   },
   props: {
     searchStartLength: {
@@ -41,11 +45,17 @@ export default {
     return {
       search: "",
       message: "Crawl Your Favorite Organization!",
-      repos: [],
+      repos: []
     };
+  },
+  beforeMount() {
+    this.search = this.$route.params.search || "";
+    this.handleSearch();
+    console.log("search", this.search);
   },
   methods: {
     handleSearch() {
+      this.addSearchToLocation(this.search);
       if (this.search.length >= this.searchStartLength) {
         githubService
           .searchOrganizations(this.search)
@@ -54,10 +64,17 @@ export default {
             const resultCount = searchResult.repositoryCount || 0;
             console.log(searchResult);
             this.repos = searchResult.edges;
-            this.message = `${resultCount} repos found!`
+            this.message = `${resultCount} repos found!`;
           })
           .catch(error => console.log(error));
       }
+    },
+    addSearchToLocation(params) {
+      history.pushState(
+        {},
+        null,
+        "#/" + encodeURIComponent(params)
+      );
     }
   }
 };
