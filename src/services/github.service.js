@@ -13,8 +13,8 @@ const githubAPI = axios.create({
   }
 });
 
-function searchOrganizations(search, cursor = "") {
-  const request = getSearchOrganizationQuery(search, cursor);
+function searchOrganizations(search, sortBy, cursor = "") {
+  const request = getSearchOrganizationQuery(search, sortBy, cursor);
   return requestGQL(request);
 }
 
@@ -23,8 +23,8 @@ function requestGQL(query) {
   .then(response => response.data && response.data.data);
 }
 
-function getSearchOrganizationQuery(query, cursor = "") {
-  let queryParam = `query: "org:${query}"`;
+function getSearchOrganizationQuery(query, sortBy, cursor = "") {
+  let queryParam = `query: "org:${query} sort:${sortBy}"`;
   if (cursor) {
     queryParam += `, after: "${cursor}"`;
   }
