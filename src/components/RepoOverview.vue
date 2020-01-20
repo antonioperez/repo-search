@@ -10,20 +10,29 @@
       <h5 class="repo-media-body mt-0 mb-1 font-weight-bold">
         <a :href="repo.url" target="_blank">{{ repo.nameWithOwner }}</a>
       </h5>
-      {{ repo.description }}
+      <p>{{ repo.description }}</p>
+      <p>
+        <span class="repo-stat"><mdb-icon icon="code-branch" />&nbsp;{{
+          repo.forks.totalCount.toLocaleString()
+        }}</span>
+        <span class="repo-stat"><mdb-icon icon="star" />&nbsp;{{ repo.stargazers.totalCount.toLocaleString() }}</span>
+        <span class="repo-stat"><mdb-icon icon="eye" />&nbsp;{{ repo.watchers.totalCount.toLocaleString() }}</span>
+        <span class="repo-stat"><mdb-icon icon="exclamation-triangle" />&nbsp;{{ repo.issues.totalCount.toLocaleString() }}</span>
+      </p>
     </mdb-media-body>
   </mdb-media>
 </template>
 
 <script>
-import { mdbMedia, mdbMediaBody, mdbMediaImage } from "mdbvue";
+import { mdbMedia, mdbMediaBody, mdbMediaImage, mdbIcon } from "mdbvue";
 
 export default {
   name: "Search",
   components: {
     mdbMedia,
     mdbMediaBody,
-    mdbMediaImage
+    mdbMediaImage,
+    mdbIcon
   },
   props: {
     repo: {
@@ -61,9 +70,6 @@ export default {
             url: "",
             name: ""
           },
-          languages: {
-            edges: []
-          },
           forks: {
             totalCount: 0
           },
@@ -75,6 +81,9 @@ export default {
           },
           watchers: {
             totalCount: 0
+          },
+          languages: {
+            edges: []
           }
         };
       }
@@ -96,5 +105,8 @@ export default {
       text-decoration: underline;
     }
   }
+}
+.repo-stat {
+  margin-right: 0.5rem;
 }
 </style>
