@@ -19,14 +19,15 @@ function searchOrganizations(search, sortBy, cursor = "") {
   return requestGQL(request);
 }
 
-function getRepoCommits(name, owner, branch, cursor){
+function getRepoCommits(name, owner, branch, cursor) {
   const request = getRepoCommitsQuery(name, owner, branch, cursor);
   return requestGQL(request);
 }
 
 function requestGQL(query) {
-  return githubAPI.post("graphql", { query })
-  .then(response => response.data && response.data.data);
+  return githubAPI
+    .post("graphql", { query })
+    .then(response => response.data && response.data.data);
 }
 
 function getSearchOrganizationQuery(query, sortBy, cursor = "") {
@@ -96,39 +97,43 @@ function getSearchOrganizationQuery(query, sortBy, cursor = "") {
   }`;
 }
 
-function getRepoCommitsQuery(name, owner, branch='master', cursor){
-  let queryParam = '';
+function getRepoCommitsQuery(name, owner, branch = "master", cursor) {
+  let queryParam = "";
   if (cursor) {
     queryParam += `, after: "${cursor}"`;
   }
 
-  return `repository(name: "${name}", owner: "${owner}") {
-    ref(qualifiedName: "${branch}") {
-      target {
-        ... on Commit {
-          id
-          history(first: 20 ${queryParam}) {
-            pageInfo {
-              startCursor
-              endCursor
-              hasNextPage
-              hasPreviousPage
-            }
-            edges {
-              node {
-                oid
-                messageHeadline
-                message
-                commitUrl
-                committedDate
-                pushedDate
-                url
-                deletions
-                additions
-                author {
-                  name
-                  email
-                  date
+  return `{
+    repository(name: "${name}", owner: "${owner}") {
+      ref(qualifiedName: "${branch}") {
+        target {
+          ... on Commit {
+            id
+            history(first: 20 ${queryParam}) {
+              pageInfo {
+                startCursor
+                endCursor
+                hasNextPage
+                hasPreviousPage
+              }
+              edges {
+                node {
+                  oid
+                  messageHeadline
+                  message
+                  commitUrl
+                  committedDate
+                  pushedDate
+                  url
+                  deletions
+                  additions
+                  changedFiles
+                  author {
+                    avatarUrl(size: 50)
+                    name
+                    email
+                    date
+                  }
                 }
               }
             }
@@ -136,5 +141,5 @@ function getRepoCommitsQuery(name, owner, branch='master', cursor){
         }
       }
     }
-  }`
+  }`;
 }
