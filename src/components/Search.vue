@@ -48,7 +48,9 @@
         @close="showRepoModal = false"
       >
         <mdb-modal-header>
-          <mdb-modal-title>{{ selectedRepo.nameWithOwner }}'s commits</mdb-modal-title>
+          <mdb-modal-title>
+            {{ selectedRepo.nameWithOwner }}'s commits
+          </mdb-modal-title>
         </mdb-modal-header>
         <mdb-modal-body>
           <repo-overview :repo="selectedRepo" />

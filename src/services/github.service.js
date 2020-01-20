@@ -109,7 +109,7 @@ function getRepoCommitsQuery(name, owner, branch = "master", cursor) {
         target {
           ... on Commit {
             id
-            history(first: 20 ${queryParam}) {
+            history(first: 50 ${queryParam}) {
               pageInfo {
                 startCursor
                 endCursor

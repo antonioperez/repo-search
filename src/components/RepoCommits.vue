@@ -22,7 +22,8 @@
         }}</span>
       </p>
       <p>
-        <label>Commit Date</label>&nbsp;{{ commit.committedDate | dateFormat }}<br />
+        <label>Commit Date</label>&nbsp;{{ commit.committedDate | dateFormat
+        }}<br />
         {{ commit.message }}
       </p>
     </mdb-media-body>

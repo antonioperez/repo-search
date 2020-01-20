@@ -10,17 +10,31 @@
       <h5 class="repo-title mt-0 mb-3 font-weight-bold">
         <a @click="onSelected"> {{ repo.name }} </a>
       </h5>
-      <h6><a :href="repo.url" target="_blank"><mdb-icon fab icon="github" />&nbsp;{{ repo.nameWithOwner }}</a></h6>
+      <h6>
+        <a :href="repo.url" target="_blank"><mdb-icon fab icon="github" />&nbsp;{{ repo.nameWithOwner }}</a>
+      </h6>
       <p>
         <span class="repo-stat"><mdb-icon icon="code-branch" />&nbsp;{{
           repo.forks.totalCount.toLocaleString()
         }}</span>
-        <span class="repo-stat"><mdb-icon icon="star" />&nbsp;{{ repo.stargazers.totalCount.toLocaleString() }}</span>
-        <span class="repo-stat"><mdb-icon icon="eye" />&nbsp;{{ repo.watchers.totalCount.toLocaleString() }}</span>
-        <span class="repo-stat"><mdb-icon icon="exclamation-triangle" />&nbsp;{{ repo.issues.totalCount.toLocaleString() }}</span>
-        <span class="repo-stat"><mdb-icon icon="database" />&nbsp;{{ repo.diskUsage.toLocaleString() }}&nbsp;KB</span>
+        <span class="repo-stat"><mdb-icon icon="star" />&nbsp;{{
+          repo.stargazers.totalCount.toLocaleString()
+        }}</span>
+        <span class="repo-stat"><mdb-icon icon="eye" />&nbsp;{{
+          repo.watchers.totalCount.toLocaleString()
+        }}</span>
+        <span class="repo-stat"><mdb-icon icon="exclamation-triangle" />&nbsp;{{
+          repo.issues.totalCount.toLocaleString()
+        }}</span>
+        <span class="repo-stat"><mdb-icon icon="database" />&nbsp;{{
+          repo.diskUsage.toLocaleString()
+        }}&nbsp;KB</span>
       </p>
-      <p>{{ repo.description }}<br />{{ repo.licenseInfo && repo.licenseInfo.name }}</p>
+      <p>
+        {{ repo.description }}<br />{{
+          repo.licenseInfo && repo.licenseInfo.name
+        }}
+      </p>
     </mdb-media-body>
   </mdb-media>
 </template>
@@ -92,8 +106,8 @@ export default {
     }
   },
   methods: {
-    onSelected () {
-      this.$emit('selectedRepo', this.repo)
+    onSelected() {
+      this.$emit("selectedRepo", this.repo);
     }
   }
 };
@@ -124,7 +138,7 @@ export default {
   }
 }
 
-.repo-owner{
+.repo-owner {
   max-width: 75px;
 }
 </style>

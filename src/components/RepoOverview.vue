@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import RepoCommits from './RepoCommits';
+import RepoCommits from "./RepoCommits";
 import { githubService } from "@/services/github.service";
 
 export default {
