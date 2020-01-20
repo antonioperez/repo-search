@@ -1,6 +1,6 @@
 <template>
   <div class="search-container">
-    <h3>Repo Spider</h3>
+    <h3>Commit Spider</h3>
     <p>{{ message }}</p>
     <mdb-container>
       <mdb-input
