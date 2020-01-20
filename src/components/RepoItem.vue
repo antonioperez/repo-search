@@ -2,7 +2,7 @@
   <mdb-media tag="li" class="repo-media">
     <mdb-media-image
       circle
-      class="d-flex mr-3"
+      class="d-flex mr-3 repo-owner"
       :src="repo.owner.avatarUrl"
       alt="repo owner avatar"
     />
@@ -122,5 +122,9 @@ export default {
   &:first-letter {
     text-transform: uppercase;
   }
+}
+
+.repo-owner{
+  max-width: 75px;
 }
 </style>
