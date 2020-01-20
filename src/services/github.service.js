@@ -30,13 +30,14 @@ function getSearchOrganizationQuery(query, cursor = "") {
   }
 
   return `{
-    search(${queryParam}, type: REPOSITORY, first: 50) {
+    search(${queryParam}, type: REPOSITORY, first: 20) {
       repositoryCount
       edges {
         node {
           ... on Repository {
-            name
             id
+            name
+            nameWithOwner
             description
             forkCount
             diskUsage
@@ -60,7 +61,7 @@ function getSearchOrganizationQuery(query, cursor = "") {
             }
             owner {
               login
-              avatarUrl(size: 100)
+              avatarUrl(size: 80)
               ... on Organization {
                 id
                 email

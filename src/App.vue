@@ -9,8 +9,5 @@
 
 #app {
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  margin-top: 150px;
-  text-align: center;
-  color: #2c3e50;
 }
 </style>
