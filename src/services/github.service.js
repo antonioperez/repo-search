@@ -20,7 +20,7 @@ function searchOrganizations(search, cursor = "") {
 
 function requestGQL(query) {
   return githubAPI.post("graphql", { query })
-  .then(response => response.data);
+  .then(response => response.data && response.data.data);
 }
 
 function getSearchOrganizationQuery(query, cursor = "") {
