@@ -14,7 +14,7 @@
     <mdb-container class="search-filters">
       <div class="search-filters-inputs">
         <span>
-          <mdb-icon icon="sort-amount-down-alt" />&nbsp;
+          <mdb-icon icon="sort-amount-up" />&nbsp;
           <select
             v-model="sortBy"
             class="sort-filter"
