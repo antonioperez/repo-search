@@ -42,7 +42,7 @@
     </mdb-container>
     <mdb-container>
       <mdb-modal
-        size="lg"
+        size="fluid"
         :show="showRepoModal"
         scrollable
         @close="showRepoModal = false"
