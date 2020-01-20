@@ -5,7 +5,7 @@
     <mdb-container>
       <mdb-input
         v-model="search"
-        label="Search"
+        label="Search an organization"
         type="text"
         class="mt-0 mb-3"
         @input="handleSearch"
