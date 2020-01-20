@@ -1,59 +1,23 @@
 <template>
-  <mdb-media tag="li" class="repo-media">
-    <mdb-media-image
-      circle
-      class="d-flex mr-3"
-      :src="repo.owner.avatarUrl"
-      alt="repo owner avatar"
-    />
-    <mdb-media-body class="repo-media-body">
-      <h5 class="repo-title mt-0 mb-3 font-weight-bold">
-        <a :href="repo.url" target="_blank">{{ repo.name }}</a>
-      </h5>
-      <h6>
-        <a :href="repo.url" target="_blank"><mdb-icon fab icon="github" />&nbsp;{{ repo.nameWithOwner }}</a>
-      </h6>
-      <p>
-        {{ repo.description }}<br />{{
-          repo.licenseInfo && repo.licenseInfo.name
-        }}
-      </p>
-      <p>
-        <span class="repo-stat"><mdb-icon icon="code-branch" />&nbsp;{{
-          repo.forks.totalCount.toLocaleString()
-        }}</span>
-        <span class="repo-stat"><mdb-icon icon="star" />&nbsp;{{
-          repo.stargazers.totalCount.toLocaleString()
-        }}</span>
-        <span class="repo-stat"><mdb-icon icon="eye" />&nbsp;{{
-          repo.watchers.totalCount.toLocaleString()
-        }}</span>
-        <span class="repo-stat"><mdb-icon icon="exclamation-triangle" />&nbsp;{{
-          repo.issues.totalCount.toLocaleString()
-        }}</span>
-        <span class="repo-stat"><mdb-icon icon="database" />&nbsp;{{
-          repo.diskUsage.toLocaleString()
-        }}&nbsp;KB</span>
-      </p>
-    </mdb-media-body>
-  </mdb-media>
+  <div>
+    <ul class="list-unstyled">
+      <repo-commits
+        v-for="(commit, index) in commits"
+        :key="index"
+        :commit="commit.node"
+      />
+    </ul>
+  </div>
 </template>
 
 <script>
-import {
-  mdbMedia,
-  mdbMediaBody,
-  mdbMediaImage,
-  mdbIcon,
-} from "mdbvue";
+import RepoCommits from './RepoCommits';
+import { githubService } from "@/services/github.service";
 
 export default {
   name: "RepoOverview",
   components: {
-    mdbMedia,
-    mdbMediaBody,
-    mdbMediaImage,
-    mdbIcon
+    RepoCommits
   },
   props: {
     repo: {
@@ -109,32 +73,34 @@ export default {
         };
       }
     }
+  },
+  data() {
+    return {
+      branch: "master",
+      cursor: "",
+      pageInfo: {},
+      commits: []
+    };
+  },
+  beforeMount() {
+    this.getCommits();
+  },
+  methods: {
+    getCommits() {
+      const repo = this.repo;
+      if (repo.name) {
+        githubService
+          .getRepoCommits(repo.name, repo.owner.login, "master", this.cursor)
+          .then(response => {
+            const repo = response.repository.ref;
+            const history = repo.target.history;
+
+            this.pageInfo = history.pageInfo;
+            this.commits = history.edges;
+            console.log(this.commits);
+          });
+      }
+    }
   }
 };
 </script>
-
-<style scoped lang="scss">
-.repo-media {
-  text-align: left;
-  margin-bottom: 1.5rem;
-}
-
-.repo-media-body {
-  a {
-    color: #000;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-.repo-stat {
-  margin-right: 0.5rem;
-}
-
-.repo-title {
-  text-transform: lowercase;
-  &:first-letter {
-    text-transform: uppercase;
-  }
-}
-</style>
