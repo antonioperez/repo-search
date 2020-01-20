@@ -11,7 +11,7 @@
         <a :href="repo.url" target="_blank">{{ repo.name }}</a>
       </h5>
       <h6><a :href="repo.url" target="_blank"><mdb-icon fab icon="github" />&nbsp;{{ repo.nameWithOwner }}</a></h6>
-      <p>{{ repo.description }}</p>
+      <p>{{ repo.description }}<br/>{{ repo.licenseInfo.name }}</p>
       <p>
         <span class="repo-stat"><mdb-icon icon="code-branch" />&nbsp;{{
           repo.forks.totalCount.toLocaleString()
@@ -19,6 +19,7 @@
         <span class="repo-stat"><mdb-icon icon="star" />&nbsp;{{ repo.stargazers.totalCount.toLocaleString() }}</span>
         <span class="repo-stat"><mdb-icon icon="eye" />&nbsp;{{ repo.watchers.totalCount.toLocaleString() }}</span>
         <span class="repo-stat"><mdb-icon icon="exclamation-triangle" />&nbsp;{{ repo.issues.totalCount.toLocaleString() }}</span>
+        <span class="repo-stat"><mdb-icon icon="database" />&nbsp;{{ repo.diskUsage.toLocaleString() }}&nbsp;KB</span>
       </p>
     </mdb-media-body>
   </mdb-media>
