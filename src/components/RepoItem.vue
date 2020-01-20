@@ -1,11 +1,13 @@
 <template>
   <mdb-media tag="li" class="repo-media">
-    <mdb-media-image
-      circle
-      class="d-flex mr-3 repo-owner"
-      :src="repo.owner.avatarUrl"
-      alt="repo owner avatar"
-    />
+    <a @click="onSelected">
+      <mdb-media-image
+        circle
+        class="d-flex mr-3 repo-owner"
+        :src="repo.owner.avatarUrl"
+        alt="repo owner avatar"
+      />
+    </a>
     <mdb-media-body class="repo-media-body">
       <h5 class="repo-title mt-0 mb-3 font-weight-bold">
         <a @click="onSelected"> {{ repo.name }} </a>
