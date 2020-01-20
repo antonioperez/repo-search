@@ -32,6 +32,12 @@ function getSearchOrganizationQuery(query, sortBy, cursor = "") {
   return `{
     search(${queryParam}, type: REPOSITORY, first: 20) {
       repositoryCount
+      pageInfo {
+        startCursor
+        hasNextPage
+        endCursor
+        hasPreviousPage
+      }
       edges {
         node {
           ... on Repository {

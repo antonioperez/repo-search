@@ -15,7 +15,11 @@
       <div class="search-filters-inputs">
         <span>
           <mdb-icon icon="sort-amount-down-alt" />&nbsp;
-          <select v-model="sortBy" @change="handleFilterChange" class="sort-filter">
+          <select
+            v-model="sortBy"
+            class="sort-filter"
+            @change="handleFilterChange"
+          >
             <option value="forks">Forks</option>
             <option value="stars">Stars</option>
             <option value="help-wanted-issues">Help Wanted Issues</option>
@@ -31,6 +35,9 @@
           :repo="repo.node"
         />
       </ul>
+      <div v-if="isLoading" class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
     </mdb-container>
   </div>
 </template>
@@ -56,11 +63,23 @@ export default {
   },
   data() {
     return {
+      resultCount: 0,
+      isLoading: false,
       search: "",
       message: "Crawl Your Favorite Organization!",
       sortBy: "forks",
+      cursor: "",
+      pageInfo: {
+        startCursor: "",
+        endCursor: "",
+        hasNextPage: false,
+        hasPreviousPage: false
+      },
       repos: []
     };
+  },
+  mounted() {
+    this.handleScroll();
   },
   beforeMount() {
     this.search = this.$route.params.search || "";
@@ -71,25 +90,50 @@ export default {
     handleSearch() {
       this.addSearchToLocation(this.search);
       if (this.search.length >= this.searchStartLength) {
+        this.isLoading = true;
         githubService
-          .searchOrganizations(this.search, this.sortBy)
+          .searchOrganizations(this.search, this.sortBy, this.cursor)
           .then(response => {
+            this.isLoading = false;
             const searchResult = response.search || {};
             const resultCount = searchResult.repositoryCount || 0;
-            console.log(searchResult);
+            const repos = searchResult.edges;
+            if(this.cursor) {
+              this.repos.push(...repos);
+            } else {
             this.repos = searchResult.edges;
+            }
+
+            this.pageInfo = searchResult.pageInfo;
+            this.resultCount += resultCount;
             this.message = `${resultCount} repos found!`;
-          })
-          .catch(error => console.log(error));
+          });
       }
     },
     handleFilterChange(event) {
       this.sortBy = event.target.value;
       this.handleSearch();
     },
+    handleScroll() {
+      window.onscroll = () => {
+        const bottomOfWindow =
+          Math.max(
+            window.pageYOffset,
+            document.documentElement.scrollTop,
+            document.body.scrollTop
+          ) +
+            window.innerHeight ===
+          document.documentElement.offsetHeight;
+
+        if (bottomOfWindow && this.pageInfo.hasNextPage) {
+          this.cursor = this.pageInfo.endCursor;
+          this.handleSearch();
+        }
+      };
+    },
     addSearchToLocation(params) {
       history.pushState({}, null, "#/" + encodeURIComponent(params));
-    }
+    },
   }
 };
 </script>
@@ -118,8 +162,9 @@ export default {
 }
 
 @media only screen and (max-width: 850px) {
-  .sort-filter, .search-filters-inputs {
-    width:90%;
+  .sort-filter,
+  .search-filters-inputs {
+    width: 90%;
     float: none;
   }
 }

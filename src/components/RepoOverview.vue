@@ -11,7 +11,7 @@
         <a :href="repo.url" target="_blank">{{ repo.name }}</a>
       </h5>
       <h6><a :href="repo.url" target="_blank"><mdb-icon fab icon="github" />&nbsp;{{ repo.nameWithOwner }}</a></h6>
-      <p>{{ repo.description }}<br/>{{ repo.licenseInfo.name }}</p>
+      <p>{{ repo.description }}<br />{{ repo.licenseInfo && repo.licenseInfo.name }}</p>
       <p>
         <span class="repo-stat"><mdb-icon icon="code-branch" />&nbsp;{{
           repo.forks.totalCount.toLocaleString()
