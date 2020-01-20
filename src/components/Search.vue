@@ -112,6 +112,7 @@ export default {
     },
     handleFilterChange(event) {
       this.sortBy = event.target.value;
+      this.cursor = "";
       this.handleSearch();
     },
     handleScroll() {
