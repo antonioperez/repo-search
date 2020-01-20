@@ -5,7 +5,7 @@ export const githubService = {
 };
 
 const baseURL = "https://api.github.com/";
-const apiKey = "c309ecc9ad19c4b77baa3185510353e6da2c8c99";
+const apiKey = '';
 const githubAPI = axios.create({
   baseURL,
   headers: {
@@ -19,7 +19,6 @@ function searchOrganizations(search, cursor = "") {
 }
 
 function requestGQL(query) {
-  console.log(query);
   return githubAPI.post("graphql", { query })
   .then(response => response.data);
 }
