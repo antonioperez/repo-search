@@ -47,8 +47,6 @@ function getSearchOrganizationQuery(query, sortBy, cursor = "") {
             description
             forkCount
             diskUsage
-            createdAt
-            homepageUrl
             url
             milestones(first: 10) {
               totalCount
@@ -69,18 +67,8 @@ function getSearchOrganizationQuery(query, sortBy, cursor = "") {
               login
               avatarUrl(size: 80)
               ... on Organization {
-                id
-                email
                 url
                 name
-              }
-            }
-            languages(first: 10) {
-              edges {
-                node {
-                  name
-                  color
-                }
               }
             }
             forks {
