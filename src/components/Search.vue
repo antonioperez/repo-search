@@ -29,23 +29,56 @@
     </mdb-container>
     <mdb-container>
       <ul class="list-unstyled">
-        <repo-overview
+        <repo-item
           v-for="(repo, index) in repos"
           :key="index"
           :repo="repo.node"
+          @selectedRepo="onRepoSelected"
         />
       </ul>
       <div v-if="isLoading" class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </mdb-container>
+    <mdb-container>
+      <mdb-modal
+        size="lg"
+        :show="showRepoModal"
+        scrollable
+        @close="showRepoModal = false"
+      >
+        <mdb-modal-header>
+          <mdb-modal-title>{{ selectedRepo.nameWithOwner }}'s commits</mdb-modal-title>
+        </mdb-modal-header>
+        <mdb-modal-body>
+          <repo-overview :repo="selectedRepo" />
+        </mdb-modal-body>
+        <mdb-modal-footer>
+          <mdb-btn color="primary" @click.native="showRepoModal = false">
+            Close
+          </mdb-btn>
+        </mdb-modal-footer>
+      </mdb-modal>
+    </mdb-container>
   </div>
 </template>
 
 <script>
-import { mdbInput, mdbContainer, mdbIcon } from "mdbvue";
+import {
+  mdbInput,
+  mdbContainer,
+  mdbIcon,
+  mdbBtn,
+  mdbModal,
+  mdbModalHeader,
+  mdbModalTitle,
+  mdbModalBody,
+  mdbModalFooter
+} from "mdbvue";
+import RepoItem from "./RepoItem";
 import RepoOverview from "./RepoOverview";
 import { githubService } from "@/services/github.service";
+import { scrollService } from "@/services/scroll.service";
 
 export default {
   name: "Search",
@@ -53,6 +86,13 @@ export default {
     mdbInput,
     mdbContainer,
     mdbIcon,
+    mdbBtn,
+    mdbModal,
+    mdbModalHeader,
+    mdbModalTitle,
+    mdbModalBody,
+    mdbModalFooter,
+    RepoItem,
     RepoOverview
   },
   props: {
@@ -64,18 +104,20 @@ export default {
   data() {
     return {
       resultCount: 0,
+      showRepoModal: false,
       isLoading: false,
       search: "",
-      message: "Crawl Your Favorite Organization!",
+      message: "Crawl a Repo's commits!",
       sortBy: "forks",
       cursor: "",
+      selectedRepo: {},
+      repos: [],
       pageInfo: {
         startCursor: "",
         endCursor: "",
         hasNextPage: false,
         hasPreviousPage: false
-      },
-      repos: []
+      }
     };
   },
   mounted() {
@@ -84,7 +126,6 @@ export default {
   beforeMount() {
     this.search = this.$route.params.search || "";
     this.handleSearch();
-    console.log("search", this.search);
   },
   methods: {
     handleSearch() {
@@ -98,10 +139,10 @@ export default {
             const searchResult = response.search || {};
             const resultCount = searchResult.repositoryCount || 0;
             const repos = searchResult.edges;
-            if(this.cursor) {
+            if (this.cursor) {
               this.repos.push(...repos);
             } else {
-            this.repos = searchResult.edges;
+              this.repos = searchResult.edges;
             }
 
             this.pageInfo = searchResult.pageInfo;
@@ -117,15 +158,7 @@ export default {
     },
     handleScroll() {
       window.onscroll = () => {
-        const bottomOfWindow =
-          Math.max(
-            window.pageYOffset,
-            document.documentElement.scrollTop,
-            document.body.scrollTop
-          ) +
-            window.innerHeight ===
-          document.documentElement.offsetHeight;
-
+        const bottomOfWindow = scrollService.isBottomScreen();
         if (bottomOfWindow && this.pageInfo.hasNextPage) {
           this.cursor = this.pageInfo.endCursor;
           this.handleSearch();
@@ -135,6 +168,11 @@ export default {
     addSearchToLocation(params) {
       history.pushState({}, null, "#/" + encodeURIComponent(params));
     },
+    onRepoSelected(value) {
+      console.log(value);
+      this.selectedRepo = value;
+      this.showRepoModal = true;
+    }
   }
 };
 </script>
